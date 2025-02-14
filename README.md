@@ -14,4 +14,4 @@ This is a simple news analyzer that can be used to pull and analyze google news 
 
 ## Customization
 
-Modify the [context.yaml](./configs/context.yaml) file to change the search terms and context you want the system to search for.
+Modify the [context.yaml](./configs/context.yaml) file to change the search terms, context, and llm model you want the system to search for or use.
