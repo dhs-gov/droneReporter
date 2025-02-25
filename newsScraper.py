@@ -50,7 +50,7 @@ def getHistory():
     historyContext = "This is the list of summarized incidents that have been detected so far.  If a news story is similar to any of these incidents, it is not unique: \n"
 
     for incident in incidents:
-        historyContext += f"Title: {incident['title']}, Date: {incident['date']}, Summery: {incident['summery']} \n"
+        historyContext += f"Title: {incident['features'][0]['properties']['title']}, Date: {incident['features'][0]['properties']['date']}, Summery: {incident['features'][0]['properties']['summery']} \n"
 
     return historyContext
 
@@ -67,6 +67,7 @@ def getHistory():
 
 # get the history context of all current incidents
 historyContext = getHistory() 
+#print(f"History context: {historyContext}")
 
 # gets all drone stories from the past hour as a json list
 newsJSON = googleNews.get_news(context["news"]["TOPIC"])
@@ -112,14 +113,24 @@ for story in newsJSON:
             # get the location of the incident
             location = geolocator.geocode(decision['location'])
 
-            # make the JSON object representing the incident
+            # make the GeoJSON object representing the incident
             incident = {
-                "title": story['title'],
-                "summery": story['description'],
-                "date": story['published date'],
-                "url": decodedURL["decoded_url"],
-                "latitude": location.latitude,
-                "longitude": location.longitude
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [location.longitude, location.latitude]
+                        },
+                        "properties": {
+                            "title": story['title'],
+                            "summery": story['description'],
+                            "date": story['published date'],
+                            "url": decodedURL["decoded_url"]
+                        }
+                    }
+                ]
             }
 
             # use the timestamp as the file name for the incident

@@ -14,6 +14,7 @@ news:
 
   # How far back in time to look for articles EXAMPLE: 1h, 7d, 1m, 1y
   LOOKBACK: '1h'
+  #LOOKBACK: '7d'
 
 # config settings for the LLM analyzer
 llm:
